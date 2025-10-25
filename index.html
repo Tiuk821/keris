@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+</head>
+<body style="margin: 0; overflow: hidden;">
+    <a-scene embedded 
+    arjs="sourceType: webcam; videoSettings: {facingMode: 'environment', resize: 'false'}"
+    renderer="colorManagement: true; physicallyCorrectLights: true;"
+    environment="preset: default; ground: none; sky: none;">
+      <a-marker type="pattern" url="pattern-marker.patt">
+        <a-gltf-model
+          id="kerisModel"
+          src="simple_keris.glb"
+          scale="0.1 0.1 0.1"
+          position="0 0.5 0"
+          rotation="-90 180 90">
+        </a-gltf-model>
+      </a-marker>
+
+      <a-entity camera></a-entity>
+    </a-scene>
+
+    <script>
+        document.querySelector('#kerisModel').addEventListener('model-loaded', (e) => {
+        const model = e.detail.model;
+
+        // Load tekstur
+        const textureLoader = new THREE.TextureLoader();
+        const diffuse = textureLoader.load('textures/Material.001_diffuse.png');
+        const normal = textureLoader.load('textures/Material.001_normal.png');
+
+        model.traverse((node) => {
+            if (node.isMesh) {
+            node.material.map = diffuse;
+            node.material.normalMap = normal;
+            node.material.metalness = 0.2;
+            node.material.roughness = 0.8;
+            node.material.needsUpdate = true;
+            }
+        });
+
+        // Tambah pencahayaan
+        const scene = document.querySelector('a-scene').object3D;
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+        dirLight.position.set(1, 1, 1);
+        scene.add(dirLight);
+
+        const ambient = new THREE.AmbientLight(0xffffff, 1.5);
+        scene.add(ambient);
+        });
+    </script>
+
+
+  </body>
+</html>
