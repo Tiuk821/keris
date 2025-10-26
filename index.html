@@ -1,0 +1,59 @@
+<html>
+    <head>
+        <title>Marker Based 2</title>
+        <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
+        
+        <script>
+            AFRAME.registerComponent('trackable-object', {
+                // Dijalankan saat marker terdeteksi
+                onImageFound: function () {
+                    this.el.setAttribute('visible', true); // Tampilkan objek
+                },
+                
+                // Dijalankan saat marker hilang
+                onImageLost: function () {
+                    this.el.setAttribute('visible', false); // Sembunyikan objek
+                },
+
+                init: function () {
+                    // Sembunyikan objek saat pertama kali dimuat
+                    this.el.setAttribute('visible', false);
+                    
+                    // Mendengarkan event dari scene
+                    this.el.sceneEl.addEventListener('image-tracking-found', this.onImageFound.bind(this));
+                    this.el.sceneEl.addEventListener('image-tracking-lost', this.onImageLost.bind(this));
+                }
+            });
+        </script>
+    </head>
+    <body>
+
+        <a-scene webxr="optionalFeatures: image-tracking;" renderer="colorManagement: true;">
+            <a-assets>
+                <a-asset-item id="scalawag-gltf" src="simple_keris (1).glb"></a-asset-item>
+                
+                <img id="keris-marker-img" src="marker.jpg"> 
+            </a-assets>
+
+            <a-entity 
+              xr-image-tracking="image: #keris-marker-img; widthInMeters: 0.15;"
+              trackable-object>
+            
+                <a-entity
+                  id="scalawag"
+                  gltf-model="#scalawag-gltf"
+                  position="0 0.1 0" 
+                  scale="0.1 0.1 0.1" 
+                  shadow="receive: false"
+                  animation-mixer>
+                </a-entity>
+            </a-entity>
+
+            <a-entity camera></a-entity>
+            <a-entity light="type: ambient; intensity: 0.5;"></a-entity>
+            <a-entity light="type: directional; castShadow: true; intensity: 0.6;" position="-1 2 4"></a-entity>
+        </a-scene>
+
+    </body>
+</html>
