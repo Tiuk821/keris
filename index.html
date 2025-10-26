@@ -1,0 +1,54 @@
+<html>
+  <head>
+    <title>Marker Based 3</title>
+    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+    <script>
+      AFRAME.registerComponent('trackable-object', {
+        init: function () {
+          const el = this.el;
+          el.setAttribute('visible', false);
+
+          el.addEventListener('xrimagefound', () => {
+            console.log("✅ Gambar terdeteksi!");
+            el.setAttribute('visible', true);
+          });
+
+          el.addEventListener('xrimagelost', () => {
+            console.log("❌ Gambar hilang!");
+            el.setAttribute('visible', false);
+          });
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <a-scene
+      webxr="optionalFeatures: image-tracking;"
+      renderer="colorManagement: true;"
+      vr-mode-ui="enabled: false"
+      embedded
+    >
+      <a-assets>
+        <img id="keris-marker-img" src="marker.jpg">
+        <a-asset-item id="model" src="simple_keris (1).glb"></a-asset-item>
+      </a-assets>
+
+      <a-entity
+        id="track"
+        xr-image-tracking="image: #keris-marker-img; widthInMeters: 0.15;"
+        trackable-object
+      >
+        <a-entity
+          gltf-model="#model"
+          position="0 0.1 0"
+          scale="0.1 0.1 0.1"
+          animation-mixer
+        ></a-entity>
+      </a-entity>
+
+      <a-entity camera></a-entity>
+      <a-entity light="type: ambient; intensity: 0.5;"></a-entity>
+      <a-entity light="type: directional; castShadow: true; intensity: 1;" position="-1 2 4"></a-entity>
+    </a-scene>
+  </body>
+</html>
