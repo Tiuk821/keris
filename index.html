@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>WebAR Keris Interaktif</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.2/aframe/build/aframe-ar.min.js"></script>
+
+    <!-- Gesture detector untuk interaksi -->
+    <script>
+      AFRAME.registerComponent('gesture-detector', {
+        schema: {
+          element: { default: '' }
+        },
+        init: function () {
+          this.targetElement = this.data.element && document.querySelector(this.data.element);
+          this.internalState = { previousState: null };
+          this.handleTouchStart = this.handleTouchStart.bind(this);
+          this.handleTouchMove = this.handleTouchMove.bind(this);
+          this.handleTouchEnd = this.handleTouchEnd.bind(this);
+          this.el.sceneEl.canvas.addEventListener('touchstart', this.handleTouchStart);
+          this.el.sceneEl.canvas.addEventListener('touchmove', this.handleTouchMove);
+          this.el.sceneEl.canvas.addEventListener('touchend', this.handleTouchEnd);
+        },
+        remove: function () {
+          this.el.sceneEl.canvas.removeEventListener('touchstart', this.handleTouchStart);
+          this.el.sceneEl.canvas.removeEventListener('touchmove', this.handleTouchMove);
+          this.el.sceneEl.canvas.removeEventListener('touchend', this.handleTouchEnd);
+        },
+        handleTouchStart: function (event) {
+          if (event.touches.length === 2) {
+            const dx = event.touches[0].clientX - event.touches[1].clientX;
+            const dy = event.touches[0].clientY - event.touches[1].clientY;
+            this.internalState.previousState = {
+              pinchDistance: Math.sqrt(dx * dx + dy * dy),
+            };
+          } else {
+            this.internalState.previousState = null;
+          }
+        },
+        handleTouchMove: function (event) {
+          if (event.touches.length === 2 && this.internalState.previousState) {
+            const dx = event.touches[0].clientX - event.touches[1].clientX;
+            const dy = event.touches[0].clientY - event.touches[1].clientY;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const scaleChange = distance / this.internalState.previousState.pinchDistance;
+            this.el.emit('gesture-pinch', { scaleChange: scaleChange });
+            this.internalState.previousState.pinchDistance = distance;
+          }
+        },
+        handleTouchEnd: function () {
+          this.internalState.previousState = null;
+        }
+      });
+
+      AFRAME.registerComponent('gesture-handler', {
+        schema: { enabled: { default: true } },
+        init: function () {
+          this.scaleFactor = 1;
+          this.rotation = { x: 0, y: 0 };
+          this.handlePinch = this.handlePinch.bind(this);
+          this.el.sceneEl.addEventListener('gesture-pinch', this.handlePinch);
+        },
+        remove: function () {
+          this.el.sceneEl.removeEventListener('gesture-pinch', this.handlePinch);
+        },
+        handlePinch: function (event) {
+          if (!this.data.enabled) return;
+          this.scaleFactor *= event.detail.scaleChange;
+          this.scaleFactor = Math.min(Math.max(this.scaleFactor, 0.05), 5);
+          this.el.object3D.scale.set(this.scaleFactor, this.scaleFactor, this.scaleFactor);
+        }
+      });
+    </script>
+  </head>
+
+  <body style="margin: 0; overflow: hidden;">
+    <a-scene
+      vr-mode-ui="enabled: false"
+      embedded
+      arjs="sourceType: webcam; debugUIEnabled: false;"
+      gesture-detector
+    >
+      <a-marker type="pattern" url="pattern-marker.patt">
+        <a-entity
+          id="keris"
+          gltf-model="simple_keris (1).glb"
+          scale="0.1 0.1 0.1"
+          position="0 0.5 0"
+          rotation="90 90 0"
+          gesture-handler
+        ></a-entity>
+      </a-marker>
+
+      <a-entity camera></a-entity>
+    </a-scene>
+  </body>
+</html>
