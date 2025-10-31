@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TosanAji.id - WebAR</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-[#f5f0e6] text-[#3b2f2f] font-sans">
+    <nav class="bg-[#4b372c] text-white flex items-center justify-between px-6 py-3 fixed top-0 left-0 w-full z-50 shadow-md">
+        <div class="flex items-center space-x-2">
+            <span class="text-2xl font-bold">TosanAji.<span class="text-yellow-400">id</span></span>
+        </div>
+
+        <!-- Tombol hamburger (hanya muncul di HP) -->
+        <button id="menu-btn" class="block md:hidden focus:outline-none">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </button>
+
+        <!-- Menu utama -->
+        <div id="menu" class="hidden flex md:flex md:space-x-6 items-center absolute md:static top-full left-0 w-full md:w-auto bg-[#4b372c] md:bg-transparent md:flex-row flex-col text-center space-y-4 md:space-y-0 py-4 md:py-0">
+            <a href="#home" class="py-2 md:py-0 hover:text-yellow-400">Website Resmi</a>
+            <a href="#petunjuk" class="py-2 md:py-0 hover:text-yellow-400">Petunjuk</a>
+            <a href="#ar" class="bg-yellow-400 text-[#4b372c] font-semibold rounded-xl px-4 py-2 hover:bg-yellow-500 md:ml-4">Mulai AR</a>
+        </div>
+    </nav>
+
+
+
+  <!-- Hero Section -->
+  <div class="parallax-parent">
+    <div class="parallax flex flex-col justify-center items-center text-center py-24 px-4">
+        <h2 class="text-5xl font-extrabold mb-4">Eksplorasi Budaya Lewat Teknologi</h2>
+        <p class="text-lg text-[#5b4c3b] max-w-2xl mb-10">
+          TosanAji.id menghadirkan pengalaman interaktif memperkenalkan keris tradisional Nusantara 
+          melalui teknologi Augmented Reality berbasis web.
+        </p>
+        <a href="#mulai" class="bg-[#4a3c2a] text-white px-8 py-3 rounded-full hover:bg-[#6a5238] transition">
+          Mulai AR
+        </a>
+    </div>
+  </div>
+
+  <!-- Tentang -->
+  <section id="tentang" class="bg-white py-20 px-6 text-center">
+    <h3 class="text-3xl font-semibold mb-4">Website Resmi TosanAji.id</h3>
+    <p class="text-[#4a3c2a] max-w-2xl mx-auto">
+      Proyek ini merupakan bagian dari penelitian tugas akhir yang mengembangkan media pembelajaran
+      interaktif berbasis Augmented Reality untuk memperkenalkan berbagai jenis keris tradisional Indonesia.
+      Aplikasi ini menggunakan teknologi WebAR sehingga dapat diakses langsung melalui browser tanpa perlu menginstal aplikasi tambahan.
+      <br>
+      <br>
+      <a href="https://tosanaji.id/" class="bg-amber-500 text-[#4a3c2a] px-8 py-3 rounded-full font-semibold hover:bg-amber-400 transition">
+      Situs Resmi Kami
+      </a>
+    </p>
+  </section>
+
+  <!-- Petunjuk -->
+  <section id="petunjuk" class="bg-[#f5ede1] py-20 px-6 text-center">
+    <h3 class="text-3xl font-semibold mb-6">Petunjuk Penggunaan</h3>
+    <ol class="max-w-2xl mx-auto text-left space-y-4 text-[#3b2f2f]">
+      <li>1. Siapkan marker keris yang telah disediakan.</li>
+      <li>2. Klik tombol <b>Mulai AR</b> di halaman ini.</li>
+      <li>3. Izinkan akses kamera pada perangkat Anda.</li>
+      <li>4. Arahkan kamera ke marker untuk melihat model 3D keris secara langsung.</li>
+      <li>5. Geser jari untuk memperbesar atau memutar tampilan jika tersedia.</li>
+    </ol>
+  </section>
+
+  <!-- Mulai AR -->
+  <section id="mulai" class="py-20 text-center">
+    <h3 class="text-3xl font-semibold mb-6">Mulai Augmented Reality</h3>
+    <p class="text-[#5b4c3b] mb-8">Tekan tombol di bawah untuk memulai pengalaman AR Anda.</p>
+    <a href="arsite.html" class="bg-amber-500 text-[#4a3c2a] px-8 py-3 rounded-full font-semibold hover:bg-amber-400 transition">
+      Buka WebAR
+    </a>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-[#4a3c2a] text-white text-center py-6">
+    <p>&copy; 2025 TosanAji.id — Dikembangkan untuk Skripsi di Universitas Brawijaya, Fakultas Ilmu Komputer</p>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+  <script>
+    const btn = document.getElementById('menu-btn');
+    const menu = document.getElementById('menu');
+
+    btn.addEventListener('click', () => {
+        menu.classList.toggle('hidden');
+    });
+  </script>   
+
+</body>
+</html>
